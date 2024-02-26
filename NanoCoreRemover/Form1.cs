@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -107,6 +107,7 @@ namespace NanoCoreRemover
             }
             else
             {
+                progressBar1.Maximum = progressBar1.Value;
                 MessageBox.Show("Operation completed successfully.");
             }
         }
