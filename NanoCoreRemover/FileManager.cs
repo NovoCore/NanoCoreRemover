@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using NanoCoreRemover;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Collections.Generic;
+using Microsoft.Win32;
 
 public class FileManager
 {
@@ -21,7 +23,10 @@ public class FileManager
         listView1 = listView;
         label1 = textLabel;
     }
-
+    string GetDownloadFolderPath()
+    {
+        return Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders", "{374DE290-123F-4565-9164-39C4925E467B}", String.Empty).ToString();
+    }
     public void CheckAndScan()
     {
         string[] directories = {
@@ -29,6 +34,7 @@ public class FileManager
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+            GetDownloadFolderPath(),
             Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory),
             Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
             Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
@@ -88,7 +94,7 @@ public class FileManager
         try
         {
             var assemblyName = AssemblyName.GetAssemblyName(filePath);
-            return assemblyName.Name.Contains("NanoCore");
+            return (assemblyName.Name.Contains("NanoCore") && !(assemblyName.Name.Contains("NanoCoreRemover")));
         }
         catch
         {
@@ -109,16 +115,40 @@ public class FileManager
         }
     }
 
+    private List<string> GetFiles(string path, string pattern)
+    {
+        var files = new List<string>();
+        var directories = new string[] { };
+
+        try
+        {
+            files.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
+            directories = Directory.GetDirectories(path);
+        }
+        catch (UnauthorizedAccessException) { }
+
+        foreach (var directory in directories)
+            try
+            {
+                files.AddRange(GetFiles(directory, pattern));
+            }
+            catch (UnauthorizedAccessException) { }
+
+        return files;
+    }
+
     private int CountFiles(string directory)
     {
         int count = 0;
         try
         {
-            count = Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Count();
+            count = GetFiles(directory, "*.*").Count;
         }
         catch (Exception ex)
         {
+
             Console.WriteLine($"Error counting files in {directory}: {ex.Message}");
+
         }
         return count;
     }
