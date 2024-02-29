@@ -2,13 +2,11 @@
 
 ## About
 
-I made NanoCore Remover because I was tired of antivirus programs that install a bunch of stuff you don't need and still don't get rid of NanoCore. Sometimes, NanoCore hides so well that it pretends to be something important on your computer, making it super tricky to remove.
+I developed NanoCore Remover out of frustration with antivirus solutions that overload you with unnecessary features yet fail to effectively eliminate NanoCore. The truly insidious aspect lies in how crypters can evade detection by your antivirus, disable it, and subsequently allow NanoCore to operate unimpeded.
 
-## How It Works
+## How Does NanoCore Remover Disable NanoCore's Critical Process Privileges?
 
-Basically, NanoCore Remover looks through your computer to find anything related to NanoCore. Then, it uses a bit of code magic to make NanoCore not so tough anymore, allowing us to say goodbye to it for good.
-
-Here's the piece of code that does the heavy lifting:
+The NanoCore Remover identifies NanoCore malware on your system and then strips it of its critical process status by setting this attribute to false. After demoting NanoCore from its critical status, the tool proceeds to safely terminate it. Below is the code snippet that facilitates this crucial step:
 
 ```csharp
 const int STATUS_SUCCESS = 0;
