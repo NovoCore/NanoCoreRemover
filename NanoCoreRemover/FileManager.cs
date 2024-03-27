@@ -39,7 +39,8 @@ public class FileManager
             Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
             Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
             Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            Path.GetTempPath()
         };
         
         int totalFiles = directories.Sum(dir => CountFiles(dir));
