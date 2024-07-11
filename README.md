@@ -1,3 +1,5 @@
+# **Disclaimer: This project has been archived and should not be used. Instead, use our [Universal Remover](https://github.com/NovoCore/UniversalRemover).**
+
 # NanoCore Remover
 
 ## About
